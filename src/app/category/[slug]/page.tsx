@@ -1,17 +1,24 @@
-import { Navbar } from "@/components/Navbar";
-import { CategorySidebar } from "@/components/CategorySidebar";
-import { ProductCard } from "@/components/ProductCard";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { CategorySidebar } from "@/components/CategorySidebar";
+import { Navbar } from "@/components/Navbar";
+import { ProductCard } from "@/components/ProductCard";
 import { getListings } from "@/lib/actions";
-import { Suspense } from "react";
 import { ListingType } from "@/lib/supabase";
+import Link from "next/link";
 import { SearchForm } from "@/components/SearchForm";
 
-export default async function Home() {
-  // Fetch listings from Supabase
-  const listings = await getListings();
-  
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  // Fetch category listings
+  const slug = await params.slug;
+  const categoryName = slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+    
+  // Filter listings by category
+  const allListings = await getListings();
+  const listings = allListings.filter(listing => listing.category === categoryName);
+
   return (
     <div>
       <Navbar />
@@ -21,11 +28,11 @@ export default async function Home() {
           <div className="md:w-1/5 hidden md:block">
             <CategorySidebar />
           </div>
-          
+
           {/* Main content */}
           <div className="w-full md:w-4/5">
             <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold mb-4 md:mb-0">Today's picks</h1>
+              <h1 className="text-2xl font-bold mb-4 md:mb-0">{categoryName}</h1>
               
               <div className="flex flex-row items-center gap-2">
                 {/* Desktop search - Only visible on medium screens and up */}
@@ -38,27 +45,25 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            
+
             {/* Product grid */}
-            <Suspense fallback={<div>Loading listings...</div>}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {listings.length > 0 ? (
-                  listings.map((listing: ListingType) => (
-                    <ProductCard
-                      key={listing.id}
-                      {...listing}
-                    />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-10">
-                    <p className="text-lg text-gray-500">No listings found</p>
-                  </div>
-                )}
-              </div>
-            </Suspense>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {listings.length > 0 ? (
+                listings.map((listing: ListingType) => (
+                  <ProductCard
+                    key={listing.id}
+                    {...listing}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-10">
+                  <p className="text-lg text-gray-500">No listings found in this category</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+} 
