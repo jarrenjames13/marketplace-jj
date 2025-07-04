@@ -273,7 +273,7 @@ export default function CreateListingForm() {
                       />
                     </div>
                     <p className="text-center text-sm text-gray-500 mt-2">
-                      {selectedFile?.name} ({(selectedFile?.size! / 1024 / 1024).toFixed(2)} MB)
+                      {selectedFile?.name} ({selectedFile && (selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                     </p>
                   </div>
                 ) : (

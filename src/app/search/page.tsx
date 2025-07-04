@@ -7,9 +7,16 @@ import { searchListings } from "@/lib/actions";
 import { ListingType } from "@/lib/supabase";
 import { SearchForm } from "@/components/SearchForm";
 
-export default async function SearchPage({ searchParams }: { searchParams: { q: string } }) {
+// Define page props type
+type SearchPageProps = {
+  searchParams: {
+    q?: string;
+  }
+}
+
+export default async function SearchPage({ searchParams }: SearchPageProps) {
   // Get search query
-  const searchQuery = (await searchParams).q || "";
+  const searchQuery = searchParams.q || "";
 
   // Perform search using the query
   const listings = searchQuery ? await searchListings(searchQuery) : [];

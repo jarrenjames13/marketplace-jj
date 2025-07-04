@@ -2,7 +2,6 @@ import { Navbar } from "@/components/Navbar";
 import { CategorySidebar } from "@/components/CategorySidebar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SearchForm } from "@/components/SearchForm";
 
 export default function SearchLoading() {
   return (

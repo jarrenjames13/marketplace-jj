@@ -7,9 +7,16 @@ import { ListingType } from "@/lib/supabase";
 import Link from "next/link";
 import { SearchForm } from "@/components/SearchForm";
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
+// Define the page props type
+type CategoryPageProps = {
+  params: {
+    slug: string;
+  }
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
   // Fetch category listings
-  const slug = await params.slug;
+  const slug = params.slug;
   const categoryName = slug
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

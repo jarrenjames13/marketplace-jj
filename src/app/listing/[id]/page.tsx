@@ -1,7 +1,4 @@
 import { Navbar } from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { getListing } from "@/lib/actions";
 import MessageSeller from "./MessageSeller";
@@ -16,9 +13,16 @@ export const images = {
   ],
 };
 
-export default async function ListingDetailPage({ params }: { params: { id: string } }) {
-  // Fix: Ensure params is awaited
-  const id = await params.id;
+// Define page props type
+type ListingPageProps = {
+  params: {
+    id: string;
+  }
+}
+
+export default async function ListingDetailPage({ params }: ListingPageProps) {
+  // Get the ID from params
+  const id = params.id;
   
   // Fetch listing data from Supabase
   const listing = await getListing(id);
@@ -83,7 +87,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                       <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                     </svg>
                     <h3 className="text-xl font-medium text-gray-400 mb-2">No image available</h3>
-                    <p className="text-gray-400">The seller hasn't uploaded any photos for this listing yet.</p>
+                    <p className="text-gray-400">The seller has not uploaded any photos for this listing yet.</p>
                   </div>
                 )}
               </div>
